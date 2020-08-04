@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
+
+const getAverage = (numbers) => {
+  console.log("평균값 계산중...");
+  if (numbers.length === 0) return 0;
+  const sum = numbers.reduce((a, b) => a + b); //a는 누적값
+  console.log(sum);
+  return sum / numbers.length;
+};
 
 const App = () => {
-  const [name, setName] = useState("홍길동");
-  const [nickname, setNickname] = useState("무적");
+  const [list, setList] = useState([]);
+  const [number, setNumber] = useState("");
 
-  //특정 값이 변경될 때 캐치하고 싶음. 여러개도 가능
-  useEffect(() => {
-    console.log("렌더링이 완료되었습니다.");
-  }, [name]); //인자 함수 딴거모르겠고 name처리된 거 만보고 내가 처리할께
-
-  const changeName = () => {
-    setName("김병만");
+  const onChange = (e) => {
+    setNumber(e.target.value);
   };
 
-  const changeNickname = () => {
-    setNickname("약함");
+  const onInsert = (e) => {
+    //등록버튼 누르면
+    const nextList = list.concat(parseInt(number));
+    setList(nextList);
+    setNumber("");
   };
 
   return (
     <div>
-      <div>{name}</div>
-      <div>{nickname}</div>
-      <button onClick={changeName}>이름변경</button>
-      <button onClick={changeNickname}>별명변경</button>
+      <input value={number} onChange={onChange} />
+      <button onClick={onInsert}>등록</button>
+      <ul>
+        {list.map((value, index) => (
+          <li key={index}>{value}</li>
+        ))}
+      </ul>
+      <div>
+        <b>평균값:</b> {getAverage(list)}
+      </div>
     </div>
   );
 };
